@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="WorkClock is a modern, beautiful, and private working hours and shift tracking app for Android. Log shifts, track breaks, set weekly goals, and sync securely with Firebase." />
+    <title>WorkClock - Track Your Working Hours & Shifts on Android</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700|Outfit:500,600,700,800&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <style>
+        /* Custom Properties & Design System */
+        :root {
+            --bg-base: #0b0f19;
+            --bg-surface: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.15);
+            --warning: #f59e0b;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-inverse: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* Reset & Global Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+        }
+
+        body {
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 5px;
+            border: 2px solid var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+
+        /* Background Decorative Blurs */
+        .blur-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .orb-1 {
+            top: -100px;
+            right: -100px;
+            width: 450px;
+            height: 450px;
+            background: var(--primary);
+        }
+        .orb-2 {
+            top: 600px;
+            left: -150px;
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+        }
+        .orb-3 {
+            bottom: 10% ;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: var(--primary-glow);
+        }
+
+        /* Layout Containers */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header / Navbar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 15, 25, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-inverse);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn-header {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-inverse);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            color: var(--text-inverse);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(135deg, #a78bfa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-playstore {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-inverse);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-playstore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-playstore i {
+            font-size: 1.35rem;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 12px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mockup Preview */
+        .mockup-container {
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            background: #1e1e24;
+            border: 10px solid #2d2d35;
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: rotateY(-10deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .phone-mockup:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #2d2d35;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            z-index: 10;
+        }
+
+        /* Phone Screen UI */
+        .screen-content {
+            flex: 1;
+            padding: 2.5rem 1.25rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            background-color: #0d0e12;
+            color: #ffffff;
+            font-family: var(--font-body);
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .app-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+
+        /* Rings / Progress Dashboard */
+        .progress-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .progress-text h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+        }
+
+        .progress-text p {
+            font-size: 0.75rem;
+            color: #8a8d9a;
+        }
+
+        .progress-ring {
+            width: 70px;
+            height: 70px;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .ring-bg {
+            stroke: rgba(255, 255, 255, 0.05);
+        }
+
+        .ring-fill {
+            stroke: var(--primary);
+            stroke-dasharray: 188.4;
+            stroke-dashoffset: 47.1; /* 75% completed */
+            stroke-linecap: round;
+        }
+
+        .ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Shift Status Tracker inside Phone Mockup */
+        .status-tracker {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--success-glow);
+            color: var(--success);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.4; }
+        }
+
+        .status-timer {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: monospace;
+            margin-bottom: 0.75rem;
+        }
+
+        .status-btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .app-btn {
+            flex: 1;
+            padding: 0.6rem 0;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .app-btn.active {
+            background: var(--primary);
+        }
+
+        /* Mock List */
+        .logs-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logs-header {
+            font-size: 0.8rem;
+            color: #8a8d9a;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .log-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            overflow-y: auto;
+            max-height: 180px;
+        }
+
+        .log-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+        }
+
+        .log-day {
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .log-date {
+            font-size: 0.65rem;
+            color: #8a8d9a;
+            margin-top: 0.1rem;
+        }
+
+        .log-hours {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #a78bfa;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-inverse);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-inverse);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0 2rem;
+            background-color: #06080e;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand-logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .footer-brand h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-inverse);
+            margin: 0;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 400px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 4rem;
+        }
+
+        .footer-col {
+            min-width: 150px;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-inverse);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-col a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-socials a {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-socials a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.75rem;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .mockup-container {
+                order: -1;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-links {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                height: 70px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 4rem 0 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.25rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Decorative Glows -->
+    <div class="blur-orb orb-1"></div>
+    <div class="blur-orb orb-2"></div>
+    <div class="blur-orb orb-3"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar" id="navbar">
+                <a href="#" class="logo">
+                    <img src="/images/workclock.png" alt="WorkClock Logo" />
+                    <span>WorkClock</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="./privacy-policy.html">Privacy Policy</a></li>
+                </ul>
+                <a href="https://github.com/arturschaefer/" target="_blank" class="btn-header">
+                    <i class="fa fa-github" aria-hidden="true" style="margin-right: 6px;"></i> GitHub
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>Track Your Work Hours,<br /><span>Own Your Time</span></h1>
+                    <p>
+                        A beautiful, private, and customizable time tracking application for Android. Log shifts, manage breaks, set weekly goals, and visualize your productivity through a modern Material 3 interface.
+                    </p>
+                    <div class="hero-ctas">
+                        <a href="https://play.google.com/store/apps/details?id=com.schaefer.workclock" target="_blank" class="btn-playstore" id="btn-download">
+                            <i class="fa fa-android" aria-hidden="true" style="margin-right: 8px;"></i> Get it on Google Play
+                        </a>
+                        <a href="https://github.com/arturschaefer/" target="_blank" class="btn-outline">
+                            <i class="fa fa-github" aria-hidden="true"></i> View Profile
+                        </a>
+                    </div>
+                </div>
+                <div class="mockup-container">
+                    <!-- CSS Phone Mockup -->
+                    <div class="phone-mockup" id="phone-mockup">
+                        <div class="phone-notch"></div>
+                        <div class="screen-content">
+                            <div class="app-header">
+                                <div class="app-title">WorkClock</div>
+                                <div class="app-avatar"></div>
+                            </div>
+                            
+                            <!-- Progress Ring Card -->
+                            <div class="progress-card">
+                                <div class="progress-text">
+                                    <h3>6h 45m</h3>
+                                    <p>Today's Shift Progress</p>
+                                </div>
+                                <div class="progress-ring">
+                                    <svg width="70" height="70">
+                                        <circle class="ring-bg" cx="35" cy="35" r="30" />
+                                        <circle class="ring-fill" cx="35" cy="35" r="30" />
+                                    </svg>
+                                    <div class="ring-text">84%</div>
+                                </div>
+                            </div>
+
+                            <!-- Status Tracker inside Mockup -->
+                            <div class="status-tracker">
+                                <div class="status-badge">
+                                    <div class="dot"></div>
+                                    <span>Active Shift</span>
+                                </div>
+                                <div class="status-timer" id="mockup-timer">06:45:12</div>
+                                <div class="status-btn-group">
+                                    <button class="app-btn">Break</button>
+                                    <button class="app-btn active">Clock Out</button>
+                                </div>
+                            </div>
+
+                            <!-- Log List -->
+                            <div class="logs-section">
+                                <div class="logs-header">Recent Logs</div>
+                                <div class="log-list">
+                                    <div class="log-item">
+                                        <div>
+                                            <div class="log-day">Wednesday</div>
+                                            <div class="log-date">Jul 1, 2026</div>
+                                        </div>
+                                        <div class="log-hours">8h 15m</div>
+                                    </div>
+                                    <div class="log-item">
+                                        <div>
+                                            <div class="log-day">Tuesday</div>
+                                            <div class="log-date">Jun 30, 2026</div>
+                                        </div>
+                                        <div class="log-hours">7h 45m</div>
+                                    </div>
+                                    <div class="log-item">
+                                        <div>
+                                            <div class="log-day">Monday</div>
+                                            <div class="log-date">Jun 29, 2026</div>
+                                        </div>
+                                        <div class="log-hours">8h 00m</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Tailored for Productivity</h2>
+                <p>Everything you need to track your shifts, manage your time, and reach your goals in a single app.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    </div>
+                    <h3>Precise Time Logging</h3>
+                    <p>Clock in, start breaks, and clock out with simple actions. Track custom shifts, overnight runs, and input historical data manually if you forget.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa fa-trophy" aria-hidden="true"></i>
+                    </div>
+                    <h3>Monthly & Weekly Goals</h3>
+                    <p>Set custom target hours per day, week, or month. Keep tabs on your progress rings that motivate you to stay consistent.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </div>
+                    <h3>Privacy-First</h3>
+                    <p>Your data belongs to you. Save logs locally in a secure Room DB. Enable Firebase integration for cross-device authentication and cloud backups only if you want to.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa fa-paint-brush" aria-hidden="true"></i>
+                    </div>
+                    <h3>Material 3 UI</h3>
+                    <p>A beautiful dark/light mode interface built with Jetpack Compose. Enjoy dynamic colors matching your system palette and smooth animations.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa fa-calculator" aria-hidden="true"></i>
+                    </div>
+                    <h3>Overtime & Earnings</h3>
+                    <p>Configure hourly wages, custom overtime rates, and tax calculations to automatically compute your estimated earnings on every payroll period.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                    </div>
+                    <h3>Automatic Sync</h3>
+                    <p>Built-in integration with Firebase Firestore triggers automatic real-time sync when a network connection is available, preserving battery life.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo">
+                        <img src="/images/workclock.png" alt="WorkClock Logo" />
+                        <h3>WorkClock</h3>
+                    </div>
+                    <p>Designed and built for developers and professionals who value tracking their time without sacrificing privacy.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Links</h4>
+                        <ul>
+                            <li><a href="/work-clock/privacy-policy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Artur Schaefer. All rights reserved.</p>
+                <div class="footer-socials">
+                    <a href="https://github.com/arturschaefer" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
+                    <a href="https://linkedin.com/in/artur-schaefer" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for active UI elements -->
+    <script>
+        // --- Static Mockup Timer ---
+        let mockupTime = 6 * 3600 + 45 * 60 + 12; // 06:45:12
+        const mockupTimerEl = document.getElementById('mockup-timer');
+        setInterval(() => {
+            mockupTime++;
+            let h = Math.floor(mockupTime / 3600).toString().padStart(2, '0');
+            let m = Math.floor((mockupTime % 3600) / 60).toString().padStart(2, '0');
+            let s = (mockupTime % 60).toString().padStart(2, '0');
+            mockupTimerEl.textContent = `${h}:${m}:${s}`;
+        }, 1000);
+    </script>
+</body>
+</html>
