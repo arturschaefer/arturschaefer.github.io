@@ -62,7 +62,7 @@ export const siteConfig = {
     {
       company: "Turing",
       title: "Software Engineer",
-      dateRange: "Jun 2024 - Jun 2025",
+      dateRange: "Jun 2025 - Current",
       bullets: [
         "Working on a huge social media application with approximately 1.1 billion Monthly Active Users worldwide. My team is responsible for posting media and content into the platform",
         "Made the analytics migration on Android for the modules owned by the team. This initiative was aligned with product to reduce costs around data sent to the servers",
