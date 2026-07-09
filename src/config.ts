@@ -44,6 +44,13 @@ export const siteConfig = {
       skills: ["Flutter", "Dart", "MobX"],
     },
     {
+      name: "Liveness CameraX Android",
+      description:
+        "An Android library for running liveness checks before capturing photos, using CameraX and Firebase Face Detection with challenges such as luminosity, smile, blink, and head movement.",
+      link: "https://github.com/arturschaefer/liveness-camerax-android/",
+      skills: ["Android", "Kotlin", "CameraX", "Firebase"],
+    },
+    {
       name: "Catganisation",
       description:
         "An app where users can sign in and browse cat breeds, filter by country, and view detailed breed information including images, temperament, and related Wikipedia links.",

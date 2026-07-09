@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="WorkClock is a modern, beautiful, and private working hours and shift tracking app for Android. Log shifts, track breaks, set weekly goals, and sync securely with Firebase." />
+    <meta name="description" content="WorkClock is a private working hours and shift tracking app for Android. Log shifts, track breaks, set weekly goals, and sync securely with Firebase." />
     <title>WorkClock - Track Your Working Hours & Shifts on Android</title>
     
     <!-- Favicon -->
@@ -20,20 +20,18 @@
     <style>
         /* Custom Properties & Design System */
         :root {
-            --bg-base: #0b0f19;
-            --bg-surface: rgba(17, 24, 39, 0.7);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.15);
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.15);
-            --warning: #f59e0b;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --text-inverse: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --bg-base: #FBFDFA;
+            --bg-surface: #FFFFFF;
+            --bg-muted: #DBE5DF;
+            --border-color: #BFC9C3;
+            --primary: #006B55;
+            --primary-dark: #002018;
+            --primary-light: #7FF8D3;
+            --secondary: #4B635A;
+            --tertiary: #406376;
+            --text-main: #191C1B;
+            --text-muted: #3F4945;
+            --text-inverse: #FFFFFF;
             --font-display: 'Outfit', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
@@ -66,43 +64,12 @@
             background: var(--bg-base);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.3);
+            background: var(--secondary);
             border-radius: 5px;
             border: 2px solid var(--bg-base);
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.6);
-        }
-
-        /* Background Decorative Blurs */
-        .blur-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(140px);
-            z-index: -1;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        .orb-1 {
-            top: -100px;
-            right: -100px;
-            width: 450px;
-            height: 450px;
             background: var(--primary);
-        }
-        .orb-2 {
-            top: 600px;
-            left: -150px;
-            width: 400px;
-            height: 400px;
-            background: var(--secondary);
-        }
-        .orb-3 {
-            bottom: 10% ;
-            right: -100px;
-            width: 500px;
-            height: 500px;
-            background: var(--primary-glow);
         }
 
         /* Layout Containers */
@@ -117,7 +84,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(11, 15, 25, 0.7);
+            background: rgba(251, 253, 250, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
@@ -135,18 +102,17 @@
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
-            color: var(--text-inverse);
+            color: var(--text-main);
             font-family: var(--font-display);
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            letter-spacing: 0;
         }
 
         .logo img {
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
         .nav-links {
@@ -171,20 +137,18 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             color: var(--text-inverse);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
             padding: 0.6rem 1.2rem;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: background 0.2s ease;
         }
 
         .btn-header:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            background: var(--primary-dark);
         }
 
         /* Hero Section */
@@ -205,15 +169,13 @@
             font-size: 3.5rem;
             font-weight: 800;
             line-height: 1.15;
-            letter-spacing: -1.5px;
-            color: var(--text-inverse);
+            letter-spacing: 0;
+            color: var(--text-main);
             margin-bottom: 1.5rem;
         }
 
         .hero-content h1 span {
-            background: linear-gradient(135deg, #a78bfa, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
         }
 
         .hero-content p {
@@ -233,20 +195,18 @@
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             color: var(--text-inverse);
             text-decoration: none;
             font-weight: 600;
             font-size: 1.05rem;
             padding: 0.9rem 1.8rem;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 8px;
+            transition: background 0.2s ease;
         }
 
         .btn-playstore:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+            background: var(--primary-dark);
         }
 
         .btn-playstore i {
@@ -257,20 +217,20 @@
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-base);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             text-decoration: none;
             font-weight: 600;
             font-size: 1.05rem;
             padding: 0.9rem 1.8rem;
-            border-radius: 12px;
+            border-radius: 8px;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: var(--bg-muted);
+            border-color: var(--secondary);
         }
 
         /* Mockup Preview */
@@ -280,245 +240,23 @@
             perspective: 1000px;
         }
 
-        .phone-mockup {
-            width: 300px;
-            height: 600px;
-            background: #1e1e24;
-            border: 10px solid #2d2d35;
-            border-radius: 40px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+        .phone-screenshot {
+            width: min(360px, 100%);
+            height: auto;
+            filter: drop-shadow(0 24px 40px rgba(0, 32, 24, 0.18));
             transform: rotateY(-10deg) rotateX(5deg);
             transition: transform 0.5s ease;
         }
 
-        .phone-mockup:hover {
+        .phone-screenshot:hover {
             transform: rotateY(0deg) rotateX(0deg);
-        }
-
-        .phone-notch {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 25px;
-            background: #2d2d35;
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            z-index: 10;
-        }
-
-        /* Phone Screen UI */
-        .screen-content {
-            flex: 1;
-            padding: 2.5rem 1.25rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            background-color: #0d0e12;
-            color: #ffffff;
-            font-family: var(--font-body);
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .app-title {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            font-weight: 700;
-        }
-
-        .app-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: #3b82f6;
-        }
-
-        /* Rings / Progress Dashboard */
-        .progress-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 18px;
-            padding: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.25rem;
-        }
-
-        .progress-text h3 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 0.15rem;
-        }
-
-        .progress-text p {
-            font-size: 0.75rem;
-            color: #8a8d9a;
-        }
-
-        .progress-ring {
-            width: 70px;
-            height: 70px;
-            position: relative;
-        }
-
-        .progress-ring svg {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring circle {
-            fill: none;
-            stroke-width: 8;
-        }
-
-        .ring-bg {
-            stroke: rgba(255, 255, 255, 0.05);
-        }
-
-        .ring-fill {
-            stroke: var(--primary);
-            stroke-dasharray: 188.4;
-            stroke-dashoffset: 47.1; /* 75% completed */
-            stroke-linecap: round;
-        }
-
-        .ring-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        /* Shift Status Tracker inside Phone Mockup */
-        .status-tracker {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 18px;
-            padding: 1.25rem;
-            margin-bottom: 1.25rem;
-            text-align: center;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: var(--success-glow);
-            color: var(--success);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .status-badge .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.4; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.4; }
-        }
-
-        .status-timer {
-            font-size: 1.75rem;
-            font-weight: 700;
-            font-family: monospace;
-            margin-bottom: 0.75rem;
-        }
-
-        .status-btn-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .app-btn {
-            flex: 1;
-            padding: 0.6rem 0;
-            border-radius: 10px;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.75rem;
-            cursor: pointer;
-        }
-
-        .app-btn.active {
-            background: var(--primary);
-        }
-
-        /* Mock List */
-        .logs-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logs-header {
-            font-size: 0.8rem;
-            color: #8a8d9a;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .log-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            overflow-y: auto;
-            max-height: 180px;
-        }
-
-        .log-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-        }
-
-        .log-day {
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-
-        .log-date {
-            font-size: 0.65rem;
-            color: #8a8d9a;
-            margin-top: 0.1rem;
-        }
-
-        .log-hours {
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #a78bfa;
         }
 
         /* Features Section */
         .features {
             padding: 6rem 0;
             border-top: 1px solid var(--border-color);
+            background: #F4F8F5;
             position: relative;
         }
 
@@ -532,7 +270,7 @@
             font-family: var(--font-display);
             font-size: 2.5rem;
             font-weight: 800;
-            color: var(--text-inverse);
+            color: var(--text-main);
             margin-bottom: 1rem;
         }
 
@@ -549,25 +287,22 @@
 
         .feature-card {
             background: var(--bg-surface);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 2.5rem 2rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: border-color 0.2s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.3);
+            border-color: var(--primary);
         }
 
         .feature-icon {
             width: 48px;
             height: 48px;
             border-radius: 12px;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
+            background: var(--bg-muted);
+            color: var(--primary-dark);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -579,7 +314,7 @@
             font-family: var(--font-display);
             font-size: 1.35rem;
             font-weight: 700;
-            color: var(--text-inverse);
+            color: var(--text-main);
             margin-bottom: 0.75rem;
         }
 
@@ -592,7 +327,7 @@
         footer {
             border-top: 1px solid var(--border-color);
             padding: 4rem 0 2rem;
-            background-color: #06080e;
+            background-color: var(--primary-dark);
         }
 
         .footer-grid {
@@ -624,7 +359,7 @@
         }
 
         .footer-brand p {
-            color: var(--text-muted);
+            color: var(--bg-muted);
             font-size: 0.95rem;
             max-width: 400px;
         }
@@ -658,13 +393,13 @@
 
         .footer-col a {
             text-decoration: none;
-            color: var(--text-muted);
+            color: var(--bg-muted);
             font-size: 0.9rem;
             transition: color 0.2s ease;
         }
 
         .footer-col a:hover {
-            color: var(--primary);
+            color: var(--primary-light);
         }
 
         .footer-bottom {
@@ -673,7 +408,7 @@
             align-items: center;
             border-top: 1px solid var(--border-color);
             padding-top: 2rem;
-            color: var(--text-muted);
+            color: var(--bg-muted);
             font-size: 0.85rem;
         }
 
@@ -683,13 +418,13 @@
         }
 
         .footer-socials a {
-            color: var(--text-muted);
+            color: var(--bg-muted);
             font-size: 1.2rem;
             transition: color 0.2s ease;
         }
 
         .footer-socials a:hover {
-            color: var(--primary);
+            color: var(--primary-light);
         }
 
         /* Responsive Design */
@@ -758,11 +493,6 @@
 </head>
 <body>
 
-    <!-- Decorative Glows -->
-    <div class="blur-orb orb-1"></div>
-    <div class="blur-orb orb-2"></div>
-    <div class="blur-orb orb-3"></div>
-
     <!-- Header -->
     <header>
         <div class="container">
@@ -775,8 +505,8 @@
                     <li><a href="#features">Features</a></li>
                     <li><a href="./privacy-policy.html">Privacy Policy</a></li>
                 </ul>
-                <a href="https://github.com/arturschaefer/" target="_blank" class="btn-header">
-                    <i class="fa fa-github" aria-hidden="true" style="margin-right: 6px;"></i> GitHub
+                <a href="https://arturschaefer.github.io/" target="_blank" class="btn-header">
+                    <i class="fa fa-user" aria-hidden="true" style="margin-right: 6px;"></i> Portfolio
                 </a>
             </nav>
         </div>
@@ -789,84 +519,19 @@
                 <div class="hero-content">
                     <h1>Track Your Work Hours,<br /><span>Own Your Time</span></h1>
                     <p>
-                        A beautiful, private, and customizable time tracking application for Android. Log shifts, manage breaks, set weekly goals, and visualize your productivity through a modern Material 3 interface.
+                        A private, customizable time tracking app for Android. Log shifts, manage breaks, set weekly goals, and review your work hours in a Material 3 interface.
                     </p>
                     <div class="hero-ctas">
                         <a href="https://play.google.com/store/apps/details?id=com.schaefer.workclock" target="_blank" class="btn-playstore" id="btn-download">
                             <i class="fa fa-android" aria-hidden="true" style="margin-right: 8px;"></i> Get it on Google Play
                         </a>
-                        <a href="https://github.com/arturschaefer/" target="_blank" class="btn-outline">
-                            <i class="fa fa-github" aria-hidden="true"></i> View Profile
+                        <a href="https://arturschaefer.github.io/" target="_blank" class="btn-outline">
+                            <i class="fa fa-user" aria-hidden="true"></i> View Portfolio
                         </a>
                     </div>
                 </div>
                 <div class="mockup-container">
-                    <!-- CSS Phone Mockup -->
-                    <div class="phone-mockup" id="phone-mockup">
-                        <div class="phone-notch"></div>
-                        <div class="screen-content">
-                            <div class="app-header">
-                                <div class="app-title">WorkClock</div>
-                                <div class="app-avatar"></div>
-                            </div>
-                            
-                            <!-- Progress Ring Card -->
-                            <div class="progress-card">
-                                <div class="progress-text">
-                                    <h3>6h 45m</h3>
-                                    <p>Today's Shift Progress</p>
-                                </div>
-                                <div class="progress-ring">
-                                    <svg width="70" height="70">
-                                        <circle class="ring-bg" cx="35" cy="35" r="30" />
-                                        <circle class="ring-fill" cx="35" cy="35" r="30" />
-                                    </svg>
-                                    <div class="ring-text">84%</div>
-                                </div>
-                            </div>
-
-                            <!-- Status Tracker inside Mockup -->
-                            <div class="status-tracker">
-                                <div class="status-badge">
-                                    <div class="dot"></div>
-                                    <span>Active Shift</span>
-                                </div>
-                                <div class="status-timer" id="mockup-timer">06:45:12</div>
-                                <div class="status-btn-group">
-                                    <button class="app-btn">Break</button>
-                                    <button class="app-btn active">Clock Out</button>
-                                </div>
-                            </div>
-
-                            <!-- Log List -->
-                            <div class="logs-section">
-                                <div class="logs-header">Recent Logs</div>
-                                <div class="log-list">
-                                    <div class="log-item">
-                                        <div>
-                                            <div class="log-day">Wednesday</div>
-                                            <div class="log-date">Jul 1, 2026</div>
-                                        </div>
-                                        <div class="log-hours">8h 15m</div>
-                                    </div>
-                                    <div class="log-item">
-                                        <div>
-                                            <div class="log-day">Tuesday</div>
-                                            <div class="log-date">Jun 30, 2026</div>
-                                        </div>
-                                        <div class="log-hours">7h 45m</div>
-                                    </div>
-                                    <div class="log-item">
-                                        <div>
-                                            <div class="log-day">Monday</div>
-                                            <div class="log-date">Jun 29, 2026</div>
-                                        </div>
-                                        <div class="log-hours">8h 00m</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <img class="phone-screenshot" src="/images/workclock-daily.png" alt="WorkClock daily progress screen on an Android phone" />
                 </div>
             </div>
         </div>
@@ -877,7 +542,7 @@
         <div class="container">
             <div class="section-header">
                 <h2>Tailored for Productivity</h2>
-                <p>Everything you need to track your shifts, manage your time, and reach your goals in a single app.</p>
+                    <p>Everything you need to track shifts, manage time, and understand your work patterns in one app.</p>
             </div>
             
             <div class="features-grid">
@@ -910,7 +575,7 @@
                         <i class="fa fa-paint-brush" aria-hidden="true"></i>
                     </div>
                     <h3>Material 3 UI</h3>
-                    <p>A beautiful dark/light mode interface built with Jetpack Compose. Enjoy dynamic colors matching your system palette and smooth animations.</p>
+                    <p>A light and dark mode interface built with Jetpack Compose, using Material 3 colors and native Android patterns.</p>
                 </div>
 
                 <div class="feature-card">
@@ -962,18 +627,5 @@
         </div>
     </footer>
 
-    <!-- Script for active UI elements -->
-    <script>
-        // --- Static Mockup Timer ---
-        let mockupTime = 6 * 3600 + 45 * 60 + 12; // 06:45:12
-        const mockupTimerEl = document.getElementById('mockup-timer');
-        setInterval(() => {
-            mockupTime++;
-            let h = Math.floor(mockupTime / 3600).toString().padStart(2, '0');
-            let m = Math.floor((mockupTime % 3600) / 60).toString().padStart(2, '0');
-            let s = (mockupTime % 60).toString().padStart(2, '0');
-            mockupTimerEl.textContent = `${h}:${m}:${s}`;
-        }, 1000);
-    </script>
 </body>
 </html>
