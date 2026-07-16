@@ -30,6 +30,13 @@ export const siteConfig = {
   ],
   projects: [
     {
+      name: "MagicBoard",
+      description:
+        "A playful Kotlin Multiplatform drawing board built with Compose. It supports colorful drawing tools, shapes, stickers, local saved drawings, and sharing.",
+      link: "https://arturschaefer.github.io/projects/magic-board/",
+      skills: ["Kotlin", "Compose", "KMP"],
+    },
+    {
       name: "WorkClock",
       description:
         "WorkClock is a user-friendly app that simplifies work schedules by making shifts easy to track and manage. With shift management and login capabilities, it helps users stay organized and on top of their working hours.",
